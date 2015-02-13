@@ -77,7 +77,7 @@ $signedRequest = $Init->generate();
         else { log.appendChild(el); }
     };
 
-    window.onerror = function (errorMsg, url, lineNumber) {
+    window.onerror = function (errorMsg, url, lineNumber) {return;
         window.log("window.onerror:" + url + ":" + lineNumber, errorMsg);
     };
 
