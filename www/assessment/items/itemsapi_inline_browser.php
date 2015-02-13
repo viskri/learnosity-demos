@@ -62,6 +62,41 @@ $signedRequest = $Init->generate();
     </p>
 </div>
 
+<div id='log'></div>
+
+<!-- WebView JS Bridge -->
+<script>
+    var uniqueId = 1;
+
+    window.log = function (message, data) {
+        var log = document.getElementById('log');
+        var el = document.createElement('div');
+        el.className = 'logLine';
+        el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data);
+        if (log.children.length) { log.insertBefore(el, log.children[0]); }
+        else { log.appendChild(el); }
+    };
+
+    window.onerror = function (errorMsg, url, lineNumber) {
+        window.log("window.onerror:" + url + ":" + lineNumber, errorMsg);
+    };
+
+    function connectWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) {
+            callback(WebViewJavascriptBridge);
+        } else {
+            document.addEventListener('WebViewJavascriptBridgeReady', function() {
+                callback(WebViewJavascriptBridge);
+            }, false);
+        }
+    }
+
+    connectWebViewJavascriptBridge(function(bridge) {
+        bridge.init();
+        window.WebViewJavascriptBridgeInstance = bridge;
+    });
+</script>
+
 <!-- Container for the items api to load into -->
 <script src="//items.vg.learnosity.com"></script>
 <script>
